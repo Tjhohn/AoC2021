@@ -92,12 +92,11 @@
 #
 # Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 
-def depth_increases(filename):
-    f = open(filename, "r")
+def next_greater_than_previous(list):
     total_increases = 0
     received_start = False
     prev = 0
-    for x in f:
+    for x in list:
         if received_start == False:
             prev = int(x)
             received_start = True
@@ -105,8 +104,11 @@ def depth_increases(filename):
             if int(x) > prev:
                 total_increases += 1
             prev = int(x)
-
     return total_increases
+
+def depth_increases(filename):
+    f = open(filename, "r")
+    return next_greater_than_previous(f)
 
 def depth_window(filename):
     f = open(filename, "r")
@@ -123,22 +125,7 @@ def depth_window(filename):
     window_sums.pop(0)
     window_sums.pop(0)
 
-    received_start = False
-    prev = 0
-    for x in window_sums:
-        if received_start == False:
-            prev = int(x)
-            received_start = True
-        else:
-            if int(x) > prev:
-                total_increases += 1
-            prev = int(x)
-
-    return total_increases
-
-
-
-    return total_increases
+    return next_greater_than_previous(window_sums)
 
 if __name__ == '__main__':
     print(depth_increases('input.txt'))
