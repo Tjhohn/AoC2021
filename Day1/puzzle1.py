@@ -97,7 +97,7 @@ def next_greater_than_previous(list):
     received_start = False
     prev = 0
     for x in list:
-        if received_start == False:
+        if not received_start:
             prev = int(x)
             received_start = True
         else:
