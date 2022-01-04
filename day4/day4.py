@@ -52,33 +52,11 @@ class Board:
 
         return total
 
-
 if __name__ == '__main__':
     filename = "day4input.txt"
     print("Day 4\n")
     file = open(filename, "r")
     nums = file.readline().split(',')
-
-    #test = Board()
-    # for x in range(5):
-    #     test.array.append(['0', '0', '0', '0', '0'],)
-    #     test.array.append(['0', '1', '2', '3', '4'])
-    #
-    # test.array.append(['0', '1', '0', '0', '0'])
-    # test.array.append(['0', '0', '0', '1', '0'])
-    # test.array.append(['1', '0', '0', '1', '0'])
-    # test.array.append(['0', '0', '0', '0', '1'])
-    # test.array.append(['0', '1', '0', '0', '0'])
-    #
-    # print(test.check_if_won())
-    # test.update('4')
-    # test.print()
-    # print(test.sum_board())
-    # test.update('2')
-    # test.print()
-    # print(test.sum_board())
-
-    print(nums)
     boards = []
     have_won = []
     for board in range(100):
