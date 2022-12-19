@@ -49,7 +49,7 @@ def day5():
             moveBoxes(how_many, source, des)
 
         part1 = getTop()
-        print('part1',part1)
+        print('part1:',part1)
         
         fillStacks()
         for line in lines:
@@ -59,7 +59,7 @@ def day5():
             des= data[2]
             moveBoxes2(how_many, source, des)
         
-    return getTop()
+    return f"part2: {getTop()}"
 
  
 def moveBoxes(cnt, source, des):
