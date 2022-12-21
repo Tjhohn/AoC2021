@@ -8,14 +8,19 @@ def day7():
             processCMD(line)
 
     total = 0
+    size2remove = 30000000 - (70000000 - directories['/'])
+    possible_directories = []
 
     for directory in directories:
         if directories[directory] < 100000:
             total += directories[directory]
 
-        
-    return total
+        if size2remove <= directories[directory]:
+            possible_directories.append(directories[directory])
 
+
+        
+    return total, min(possible_directories)
 def processCMD(cmd):
     global path
     if cmd[0] == '$':
