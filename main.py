@@ -3,8 +3,18 @@
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-    for i in range(5, 0, -1):
-        print(i)
+    test = []
+    for i in range(5):
+        test.append(i)
+
+    print(test)
+    test.pop()
+    print(test)
+
+    print(4 % 40)
+    print(40 % 40)
+    print(45 % 40)
+    print(70 % 40)
 
 
 # Press the green button in the gutter to run the script.
