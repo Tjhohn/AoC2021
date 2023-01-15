@@ -17,6 +17,8 @@ def print_hi(name):
     print(70 % 40)
 
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    print(1501 // 3)
+    # print_hi('PyCharm')
+    # print(1501 // 3)
+    val_dict ={ 'a':1}
+
 
