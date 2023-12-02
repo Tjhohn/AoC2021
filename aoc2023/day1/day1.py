@@ -1,6 +1,3 @@
-import re
-import string
-
 
 def day1(input):
     part_one_sum = 0
