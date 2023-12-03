@@ -58,59 +58,77 @@ def part2(input):
 
             if current != '*':
                 continue
+            # good till here lol
 
             neighbors = []
+            checked_values = set()
             first, second = i, j
-            if second - 1 >= 0 and input[first][second - 1].isdigit():
-                neighbors.append((first,second - 1))
-            if second + 1 < cols and input[first][second + 1].isdigit():
+            if second - 1 >= 0 and input[first][second - 1].isdigit() and (first,second) not in checked_values: # 4
+                number, new_set = getNumber(input, (first,second - 1))
+                neighbors.append(number)
+                checked_values = checked_values.union(new_set)
+            if second + 1 < cols and input[first][second + 1].isdigit(): # 5
                 neighbors.append((first, second + 1))
-            if first - 1 >= 0 and input[first - 1][second].isdigit():
+            if first - 1 >= 0 and input[first - 1][second].isdigit(): # 2
                 neighbors.append((first - 1, second))
-            if first + 1 < rows and input[first + 1][second].isdigit():
+            if first + 1 < rows and input[first + 1][second].isdigit(): # 7
                 neighbors.append((first + 1,second))
-            if first - 1 >= 0 and second - 1 >= 0 and input[first - 1][second - 1].isdigit():
+            if first - 1 >= 0 and second - 1 >= 0 and input[first - 1][second - 1].isdigit(): # 1
                 neighbors.append((first - 1, second - 1))
-            if first - 1 >= 0 and second + 1 < cols and input[first - 1][second + 1].isdigit():
+            if first - 1 >= 0 and second + 1 < cols and input[first - 1][second + 1].isdigit(): # 3
                 neighbors.append((first - 1,second + 1))
-            if first + 1 < rows and second - 1 >= 0 and input[first + 1][second - 1].isdigit():
+            if first + 1 < rows and second - 1 >= 0 and input[first + 1][second - 1].isdigit(): # 6
                 neighbors.append((first + 1, second - 1))
-            if first + 1 < rows and second + 1 < cols and input[first + 1][second + 1].isdigit():
+            if first + 1 < rows and second + 1 < cols and input[first + 1][second + 1].isdigit(): # 8
                 neighbors.append((first + 1, second + 1))
 
-            # im handling this wrong as may have 2 neighbors that are from same number!
-            if len(neighbors) >= 2:
-                row_set = set()
-                col_set = set()
+            # if neighbors:
+            #     value_list = set()
+            #     for indices in neighbors:
+            #         input_list = input[indices[0]]
+            #         index = indices[1]
+            #         result = input_list[index]
+            #         i = index + 1
+            #         while i < len(input_list) and input_list[i].isdigit():
+            #             result += input_list[i]
+            #             i += 1
+            #
+            #         # Move backward from the given index
+            #         i = index - 1
+            #         while i >= 0 and input_list[i].isdigit():
+            #             result = input_list[i] + result
+            #             i -= 1
+            #
+            #         value_list.add(int(result))
+            #
+            #     if len(value_list) < 2 or len(value_list) > 2:
+            #         continue
+            #     value_list = list(value_list)
 
-                value_list = set()
-                for indices in neighbors:
-                    input_list = input[indices[0]]
-                    index = indices[1]
-                    result = input_list[index]
-                    i = index + 1
-                    while i < len(input_list) and input_list[i].isdigit():
-                        result += input_list[i]
-                        i += 1
+                connected_sum += (value_list[0] * value_list[1])
 
-                    # Move backward from the given index
-                    i = index - 1
-                    while i >= 0 and input_list[i].isdigit():
-                        result = input_list[i] + result
-                        i -= 1
+    print(f"part two : {connected_sum}") # should be 80703636
 
-                    value_list.add(int(result))
+def getNumber(input , indices):
+    input_list = input[indices[0]]
+    index = indices[1]
+    result = input_list[index]
+    check_set = set()
+    check_set.add(indices)
+    i = index + 1
+    while i < len(input_list) and input_list[i].isdigit():
+        result += input_list[i]
+        check_set.add((indices[0],i))
+        i += 1
 
-                temp_sum = 1
+    # Move backward from the given index
+    i = index - 1
+    while i >= 0 and input_list[i].isdigit():
+        result = input_list[i] + result
+        check_set.add((indices[0],i))
+        i -= 1
 
-                for val in value_list:
-                    temp_sum = temp_sum * val
-
-                connected_sum += temp_sum
-
-    print(f"part two : {connected_sum}") # not 74956339
-
-
+    return result, check_set
 
 if __name__ == '__main__':
     with open('input') as f:
