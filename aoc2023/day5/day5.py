@@ -1,3 +1,4 @@
+
 def part1(input):
     seeds, maps = parse_input(input)
 
@@ -11,35 +12,51 @@ def part1(input):
 
     print(f"part one : {min(seeds)}")
 
+
 def part2(input):
     seeds, maps = parse_input(input)
-    seed_ranges = list(zip(seeds[0::2], seeds[1::2]))
+    seed_ranges = [(seeds[i], seeds[i] + seeds[i + 1] - 1) for i in range(0, len(seeds), 2)]
+    print(seed_ranges)
 
+    temp = seed_ranges
+    for map_list in maps:
+        temp = apply_map_ranges(temp, map_list)
+        # print(temp)
+    print(temp)
+    lowest = min(temp)[0]
 
-    for conversion_map in maps:
-        next_seed_ranges = []
-        for seed_range in seed_ranges:
-            converted_ranges = apply_map_range(seed_range, conversion_map)
-            next_seed_ranges.extend(converted_ranges)
+    print(f"Lowest location for Part Two: {lowest}")
 
-        seed_ranges = next_seed_ranges
+def apply_map_ranges(src_ranges, map_list):
+    result = []
+    for a, b in src_ranges:
+        covered_ranges = []
+        for d, s, r in map_list:
+            x, y = s, s+r-1
+            if b < x or y < a:
+                continue
+            inter1 = max(a, x)
+            inter2 = min(b, y)
+            covered_ranges.append((inter1, inter2))
+            result.append((inter1-s+d, inter2-s+d))
+        # now check for all sections of range left uncovered
+        if not covered_ranges:
+            result.append((a, b))
+            continue
+        covered_ranges.sort()
+        # check beginning
+        if covered_ranges[0][0] > a:
+            result.append((a, covered_ranges[0][0]-1))
+        # check end
+        if covered_ranges[-1][1] < b:
+            result.append((covered_ranges[-1][1]+1, b))
+        for i in range(len(covered_ranges)-1):
+            x1, y1 = covered_ranges[i]
+            x2, y2 = covered_ranges[i+1]
+            if x2 > y1+1:
+                result.append((y1+1, x2-1))
+    return result
 
-    # Ensure that seeds_ranges is always a list of tuples
-    seeds_ranges = [seed_range if isinstance(seed_range, tuple) else (seed_range,) for seed_range in seeds_ranges]
-
-    # Find the lowest location based on the starting value of the seed range
-    lowest_location = min(seeds_ranges, key=lambda x: x[0])
-
-    print(f"part two: {lowest_location[0]}")
-    # for conversion_map in maps:
-    #     next_seed_range = []
-    #     for start, length in zip(seeds_range[0::2], seeds_range[1::2]):
-    #         converted_range = apply_map_range((start, length), conversion_map)
-    #         next_seed_range.extend(converted_range)
-    #
-    #     seeds_range = next_seed_range
-
-    print(f"part two: {min(seeds_ranges)}")
 
 def apply_map(number, map):
     for dest_start, source_start, length in map:
@@ -47,20 +64,6 @@ def apply_map(number, map):
             return dest_start + (number - source_start)
     return number
 
-# def apply_map_range(range, mapt):
-#     dest_start, source_start, length = mapt
-#     new_start = apply_map(range[0], [(dest_start, source_start, length)])
-#     new_end = apply_map(range[0] + range[1] - 1, [(dest_start, source_start, length)])
-#     return [(new_start, new_end - new_start + 1)]
-
-def apply_map_range(seed_range, maps):
-    for mapt in maps:
-        dest_start, source_start, length = mapt
-        new_start = apply_map(seed_range[0], [(dest_start, source_start, length)])
-        new_end = apply_map(seed_range[0] + seed_range[1] - 1, [(dest_start, source_start, length)])
-        seed_range = (new_start, new_end - new_start + 1)
-
-    return seed_range
 
 def parse_input(input):
     seeds = list(input[0].split(":")[1].strip().split(" "))
@@ -122,8 +125,6 @@ def parse_input(input):
         index += 1
 
     return seeds, [seed_to_soil, soil_to_fert, fert_to_water, wawa_to_light, light_to_temp, temp_to_hum, hum_to_loc]
-
-
 
 
 if __name__ == '__main__':
